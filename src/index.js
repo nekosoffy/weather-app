@@ -1,11 +1,38 @@
 import './reset.css';
 import './styles.css';
 
-const input = document.getElementById('location');
-const form = document.querySelector('form');
-const inputNote = document.querySelector('input + span');
-const header = document.querySelector('h2');
-const article = document.querySelector('article');
+// Helper functions
+const select = target => document.querySelector(target);
+const selectId = target => document.getElementById(target);
+
+function create(element, parent, id, htmlClass, text) {
+  const el = document.createElement(element);
+
+  if (id !== undefined && id !== '') {
+    el.id = id;
+  }
+
+  if (htmlClass !== undefined && htmlClass !== '') {
+    el.classList.add(htmlClass);
+  }
+
+  if (text !== undefined && text !== '') {
+    el.textContent = text;
+  }
+
+  if (parent !== undefined && parent !== '') {
+    parent.appendChild(el);
+  }
+
+  return el;
+}
+//
+
+const input = selectId('location');
+const form = select('form');
+const inputNote = select('input + span');
+const header = select('h2');
+const main = document.querySelector('main');
 
 const getData = async function getDataFromAPI(location) {
   try {
@@ -33,15 +60,49 @@ const getData = async function getDataFromAPI(location) {
     const headerStyle = document.createElement('span');
     headerStyle.textContent = `${weatherData.resolvedAddress}`;
     header.append(headerStyle);
-    article.textContent = `
-    Date: ${weatherData.days[0].datetime}
-    Temperature: ${weatherData.days[0].temp}
-    Temperature (max.): ${weatherData.days[0].tempmax}
-    Temperature (min.): ${weatherData.days[0].tempmin}
-    Humidity: ${weatherData.days[0].humidity}
-    Rain: ${weatherData.days[0].precipprob}
-    Wind: ${weatherData.days[0].windspeed}
-    Description: ${weatherData.days[0].description}`;
+
+    const selectedDay = create('article', '', 'selected-day');
+    const queijo = Object.entries(weatherData.days[0]);
+    const names = [
+      'Date',
+      'Temperature',
+      'Temperature (max.)',
+      'Temperature (min.)',
+      'Humidity',
+      'Rain',
+      'Wind',
+      'Description',
+    ];
+    queijo.forEach((el, index) => {
+      create('p', selectedDay, '', 'property', `${names[index]}: ${el[1]}`);
+    });
+    main.appendChild(selectedDay);
+
+    weatherData.days.forEach((day, index) => {
+      const article = create('article', '', '', 'day-wrapper');
+      const temp = create(
+        'p',
+        article,
+        '',
+        'temp',
+        `${weatherData.days[index].temp}`,
+      );
+      const tempMin = create(
+        'p',
+        article,
+        '',
+        'temp-min',
+        `${weatherData.days[index].tempmin}`,
+      );
+      const tempMax = create(
+        'p',
+        article,
+        '',
+        'temp-max',
+        `${weatherData.days[index].tempmax}`,
+      );
+      main.appendChild(article);
+    });
   } catch (error) {
     console.error('An unexpected error occurred. Please try again later.');
     console.log(error);
