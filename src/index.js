@@ -10,10 +10,24 @@ const getData = async function getDataFromAPI(location) {
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today/next7days?key=7KYEEP4DDZDT24Y93QVRY86EC&include=days&elements=datetime,tempmax,tempmin,temp,humidity,precipprob,windspeed,description`,
       { mode: 'cors' },
     );
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        console.error('Location not found. Please, try again.');
+      } else if (response.status === 500) {
+        console.error('There was an issue with the server. Try again later.');
+      } else {
+        console.error(
+          `Unexpected error: ${response.status} - ${response.statusText}`,
+        );
+      }
+      return;
+    }
+
     const weatherData = await response.json();
     console.log(weatherData.resolvedAddress, weatherData.days);
   } catch (error) {
-    console.log(error);
+    console.error('An unexpected error occurred. Please try again later.');
   }
 };
 
