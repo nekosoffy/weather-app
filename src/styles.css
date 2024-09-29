@@ -1,6 +1,23 @@
+@font-face {
+  font-family: "open_sansregular";
+  src: url("./fonts/opensans-regular-webfont.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   /* Font sizes: */
   --input-note: 1.1rem;
+
+  /* Colors: */
+  --days-background: rgb(153, 164, 177);
+  --font: rgb(14, 14, 14);
+  --light-font: rgb(51, 48, 48);
+}
+
+body {
+  font-family: 'open_sansregular', sans-serif;
+  font-color: var(--font);
 }
 
 .note {
@@ -31,4 +48,33 @@ h2 {
 
 h2 > span {
   font-weight: bold;
+}
+
+#days-container {
+  display: flex;
+  gap: 20px;
+}
+
+.day-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--days-background);
+  border-radius: 10px;
+  padding: 10px;
+  gap: 10px;
+}
+
+img {
+  width: 30px;
+}
+
+.text-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.temp-min {
+  color: var(--light-font);
 }

@@ -1,6 +1,19 @@
 import './reset.css';
 import './styles.css';
 
+const iconList = {};
+
+function importAll(moduleResolver) {
+  moduleResolver.keys().forEach(key => {
+    const iconName = key.replace('./', '').replace(/\.svg$/, ''); // Remove extension
+    iconList[iconName] = moduleResolver(key);
+  });
+}
+
+importAll(require.context('./images', true, /\.svg$/));
+
+console.log(iconList);
+
 // Helper functions
 const select = target => document.querySelector(target);
 const selectId = target => document.getElementById(target);
@@ -26,6 +39,14 @@ function create(element, parent, id, htmlClass, text) {
 
   return el;
 }
+
+function createImg(parent, source) {
+  const el = document.createElement('img');
+
+  el.src = source;
+
+  parent.appendChild(el);
+}
 //
 
 const input = selectId('location');
@@ -37,7 +58,7 @@ const main = document.querySelector('main');
 const getData = async function getDataFromAPI(location) {
   try {
     const response = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today/next7days?key=7KYEEP4DDZDT24Y93QVRY86EC&include=days&elements=datetime,tempmax,tempmin,temp,humidity,precipprob,windspeed,description`,
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today/next7days?key=7KYEEP4DDZDT24Y93QVRY86EC&include=days&elements=datetime,tempmax,tempmin,temp,humidity,precipprob,windspeed,description,icon&iconSet=icons2`,
       { mode: 'cors' },
     );
 
@@ -55,6 +76,7 @@ const getData = async function getDataFromAPI(location) {
     }
 
     const weatherData = await response.json();
+    console.log(weatherData);
 
     header.textContent = 'Results for: ';
     const headerStyle = document.createElement('span');
@@ -62,46 +84,47 @@ const getData = async function getDataFromAPI(location) {
     header.append(headerStyle);
 
     const selectedDay = create('article', '', 'selected-day');
-    const queijo = Object.entries(weatherData.days[0]);
-    const names = [
-      'Date',
-      'Temperature',
-      'Temperature (max.)',
-      'Temperature (min.)',
-      'Humidity',
-      'Rain',
-      'Wind',
-      'Description',
+    const infoList = [
+      `Temperature: ${weatherData.days[0].temp}°`,
+      `Humidity: ${weatherData.days[0].humidity}%`,
+      `Rain: ${weatherData.days[0].precipprob}%`,
+      `Wind: ${weatherData.days[0].windspeed} km/h`,
+      `Description: ${weatherData.days[0].description}`,
     ];
-    queijo.forEach((el, index) => {
-      create('p', selectedDay, '', 'property', `${names[index]}: ${el[1]}`);
+
+    infoList.forEach((el, index) => {
+      create('p', selectedDay, '', 'property', `${infoList[index]}`);
     });
+
+    createImg(selectedDay, iconList[weatherData.days[0].icon]);
     main.appendChild(selectedDay);
+    const div = create('div', '', 'days-container');
 
     weatherData.days.forEach((day, index) => {
       const article = create('article', '', '', 'day-wrapper');
-      const temp = create(
-        'p',
-        article,
-        '',
-        'temp',
-        `${weatherData.days[index].temp}`,
-      );
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
+        new Date(`${weatherData.days[index].datetime}T00:00:00`).getDay()
+      ];
+      const weekday = create('p', article, '', 'week-day', days);
+      const img = createImg(article, iconList[weatherData.days[index].icon]);
+      const textWrapper = create('div', article, '', 'text-wrapper');
       const tempMin = create(
         'p',
-        article,
+        textWrapper,
         '',
-        'temp-min',
-        `${weatherData.days[index].tempmin}`,
+        'temp-max',
+        `${weatherData.days[index].tempmax}°`,
       );
       const tempMax = create(
         'p',
-        article,
+        textWrapper,
         '',
-        'temp-max',
-        `${weatherData.days[index].tempmax}`,
+        'temp-min',
+        `${weatherData.days[index].tempmin}°`,
       );
-      main.appendChild(article);
+
+      div.appendChild(article);
+      main.appendChild(div);
     });
   } catch (error) {
     console.error('An unexpected error occurred. Please try again later.');
