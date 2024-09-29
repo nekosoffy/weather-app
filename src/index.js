@@ -2,7 +2,10 @@ import './reset.css';
 import './styles.css';
 
 const input = document.getElementById('location');
-const button = document.querySelector('button');
+const form = document.querySelector('form');
+const inputNote = document.querySelector('input + span');
+const header = document.querySelector('h2');
+const article = document.querySelector('article');
 
 const getData = async function getDataFromAPI(location) {
   try {
@@ -25,13 +28,30 @@ const getData = async function getDataFromAPI(location) {
     }
 
     const weatherData = await response.json();
-    console.log(weatherData.resolvedAddress, weatherData.days);
+
+    header.textContent = 'Results for: ';
+    const headerStyle = document.createElement('span');
+    headerStyle.textContent = `${weatherData.resolvedAddress}`;
+    header.append(headerStyle);
+    article.textContent = `
+    Date: ${weatherData.days[0].datetime}
+    Temperature: ${weatherData.days[0].temp}
+    Temperature (max.): ${weatherData.days[0].tempmax}
+    Temperature (min.): ${weatherData.days[0].tempmin}
+    Humidity: ${weatherData.days[0].humidity}
+    Rain: ${weatherData.days[0].precipprob}
+    Wind: ${weatherData.days[0].windspeed}
+    Description: ${weatherData.days[0].description}`;
   } catch (error) {
     console.error('An unexpected error occurred. Please try again later.');
+    console.log(error);
   }
 };
 
-const handleClick = function handleSearchBtnClick() {
+const handleClick = function handleSearchBtnClick(event) {
+  event.preventDefault();
+  inputNote.classList.remove('active');
+  inputNote.textContent = '';
   const filteredInput = input.value
     .normalize('NFD')
     .replace(/[^a-zA-Z, ]/g, '')
@@ -47,4 +67,20 @@ const handleClick = function handleSearchBtnClick() {
   getData(location);
 };
 
-button.addEventListener('click', handleClick);
+input.addEventListener('focusin', () => {
+  inputNote.classList.add('active');
+  inputNote.textContent =
+    'Enter your city, state, or country. You can separate them by commas.';
+});
+
+form.addEventListener('submit', handleClick);
+
+input.addEventListener('focusout', event => {
+  const target = event.relatedTarget;
+  if (target && target.matches('#search-btn')) {
+    event.preventDefault();
+  } else {
+    inputNote.classList.remove('active');
+    inputNote.textContent = '';
+  }
+});

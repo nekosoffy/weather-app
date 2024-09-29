@@ -6,15 +6,26 @@
     <title></title>
 </head>
 <body>
-  <form novalidate>
-    <ul>
-      <li>
-        <label for="country">Search your location:</label>
-        <p>You can separate city, state and country by commas.</p>
-        <input type="text" id="location" required />
-        <button type="button">Search</button>
-      </li>
-    </ul>
-  </form>
+  <search>
+    <form>
+      <label for="location">Search your location:
+      <div class="input-wrapper">
+        <div>
+        <input type="search" id="location" pattern=".*[a-zA-Z]+.*" size="33" required />
+        <span class="note" aria-live="polite"></span>
+        </div>
+        <div>
+          <button id="search-btn">Search</button>
+        </div>
+      </div>
+    </form>
+  </search>
+  <main>
+    <h2>
+    </h2>
+  <article>
+    
+  </article>
+  </main>
 </body>
 </html>
