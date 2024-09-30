@@ -17,6 +17,14 @@ const main = select('main');
 let weatherData;
 
 const getData = async function getDataFromAPI(location) {
+  clean();
+
+  const nav = select('nav');
+
+  if (nav) {
+    nav.remove();
+  }
+
   try {
     const response = await fetch(
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today/next7days?key=7KYEEP4DDZDT24Y93QVRY86EC&include=days&elements=datetime,tempmax,tempmin,temp,humidity,precipprob,windspeed,description,icon&iconSet=icons2`,
@@ -24,6 +32,7 @@ const getData = async function getDataFromAPI(location) {
     );
 
     if (!response.ok) {
+      main.classList.remove('hidden');
       if (response.status === 400) {
         errorMessage('Location not found. Please, try again.');
       } else if (response.status === 500) {
@@ -39,15 +48,6 @@ const getData = async function getDataFromAPI(location) {
     weatherData = await response.json();
 
     main.classList.remove('hidden');
-
-    clean();
-
-    const nav = select('nav');
-
-    if (nav) {
-      nav.remove();
-    }
-
     updateHeader(weatherData);
     updateSelected(0, weatherData);
     showWeek(weatherData);
