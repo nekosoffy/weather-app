@@ -1,5 +1,3 @@
-import change from './index';
-
 const iconList = {};
 
 function importAll(moduleResolver) {
@@ -51,12 +49,12 @@ const article = document.querySelector('article');
 
 const clean = function resetSearchDisplayState() {
   article.replaceChildren();
+  create('h2', article);
 };
 
 const updateHeader = function updateHeaderSearchInfo(weatherData) {
   const header = select('h2');
-  header.textContent = 'Results for: ';
-  create('span', header, '', '', `${weatherData.resolvedAddress}`);
+  header.textContent = `${weatherData.resolvedAddress}`;
 };
 
 const errorMessage = function displayErrorMessage(text) {
@@ -65,28 +63,54 @@ const errorMessage = function displayErrorMessage(text) {
 };
 
 const updateSelected = function showSelectedDayInfo(i, weatherData) {
-  clean();
+  const wrapperContainer = create('div', article, 'wrapper-container');
+  const firstWrapper = create('div', wrapperContainer, 'first-wrapper');
+  const secondWrapper = create('div', wrapperContainer, 'second-wrapper');
+
+  createImg(firstWrapper, iconList[weatherData.days[i].icon]);
+  const temperature = create('p', firstWrapper, 'temperature');
+  temperature.setAttribute('aria-label', 'temperature');
+
+  create(
+    'span',
+    temperature,
+    '',
+    'main-temperature',
+    `${weatherData.days[i].temp}`,
+  );
+
+  create('span', temperature, '', '', ` °`);
+  const celsius = create('span', temperature, '', 'celsius', 'C');
+  create('span', temperature, '', 'divider', '|');
+  const fahrenheit = create('span', temperature, '', 'fahrenheit', 'F');
+  celsius.classList.add('on');
+  fahrenheit.classList.add('off');
+
   const infoList = [
-    `Temperature: ${weatherData.days[i].temp}°`,
     `Humidity: ${weatherData.days[i].humidity}%`,
     `Rain: ${weatherData.days[i].precipprob}%`,
     `Wind: ${weatherData.days[i].windspeed} km/h`,
-    `Description: ${weatherData.days[i].description}`,
   ];
 
-  infoList.forEach((el, index) => {
-    create('p', article, '', 'property', `${infoList[index]}`);
-  });
+  create(
+    'p',
+    secondWrapper,
+    'description',
+    '',
+    `${weatherData.days[i].description}`,
+  );
 
-  createImg(article, iconList[weatherData.days[i].icon]);
+  infoList.forEach((el, index) => {
+    create('p', secondWrapper, '', 'property', `${infoList[index]}`);
+  });
 };
 
 const showWeek = function showWeekInfoCards(weatherData) {
   const nav = create('nav', '', 'days-container');
-  nav.addEventListener('click', change);
 
   weatherData.days.forEach(day => {
-    const section = create('section', '', '', 'day-wrapper');
+    const button = create('button', nav);
+    const section = create('section', button, '', 'day-wrapper');
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
       new Date(`${day.datetime}T00:00:00`).getDay()
     ];
@@ -96,8 +120,11 @@ const showWeek = function showWeekInfoCards(weatherData) {
     create('p', textWrapper, '', 'temp-max', `${day.tempmax}°`);
     create('p', textWrapper, '', 'temp-min', `${day.tempmin}°`);
 
-    nav.appendChild(section);
     main.appendChild(nav);
+    const selectedSection = document.querySelector('section');
+    const selectedTitle = document.querySelector('h3');
+    selectedSection.classList.add('selected');
+    selectedTitle.classList.add('selected-title');
   });
 };
 

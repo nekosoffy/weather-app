@@ -12,7 +12,8 @@ import {
 
 const input = selectId('location');
 const form = select('form');
-const inputNote = select('input + span');
+const inputNote = select('search span');
+const main = select('main');
 let weatherData;
 
 const getData = async function getDataFromAPI(location) {
@@ -36,6 +37,16 @@ const getData = async function getDataFromAPI(location) {
     }
 
     weatherData = await response.json();
+
+    main.classList.remove('hidden');
+
+    clean();
+
+    const nav = select('nav');
+
+    if (nav) {
+      nav.remove();
+    }
 
     updateHeader(weatherData);
     updateSelected(0, weatherData);
@@ -67,14 +78,24 @@ const handleClick = function handleSearchBtnClick(event) {
 const change = function changeSelectedInfoCard(event) {
   const sections = document.querySelectorAll('section');
   sections.forEach((el, index) => {
+    if (el.classList.contains('selected')) {
+      const h3 = el.querySelector('h3');
+      h3.classList.remove('selected-title');
+      el.classList.remove('selected');
+    }
+
     if (el === event.target || el.contains(event.target)) {
       clean();
+      updateHeader(weatherData);
       updateSelected(index, weatherData);
+      el.classList.add('selected');
+      const h3 = el.querySelector('h3');
+      h3.classList.add('selected-title');
     }
   });
 };
 
-export default change;
+main.addEventListener('click', change);
 
 input.addEventListener('focusin', () => {
   inputNote.classList.add('active');

@@ -8,51 +8,202 @@
 :root {
   /* Font sizes: */
   --input-note: 1.1rem;
+  --description: 1.3rem;
+  --second-wrapper: 1.5rem;
+  --temperature: 2.5rem;
+  --header: 2.5rem;
 
   /* Colors: */
-  --days-background: rgb(153, 164, 177);
-  --font: rgb(14, 14, 14);
-  --light-font: rgb(51, 48, 48);
+  --days-background: rgb(159, 212, 212);
+  --search-background: rgb(255, 255, 255);
+  --selected-background: rgb(223, 194, 156);
+  --container-background: rgb(50, 73, 88);
+  --input-background: rgb(70, 94, 110);
+  --body-background: rgb(54, 104, 138);
+  --main-background: rgb(131, 217, 217);
+  --secondary: rgb(232, 99, 9);
+  --secondary-font: rgb(232, 99, 9);
+  --header-font: rgb(204, 87, 10);
+  --font: rgb(40, 64, 79);
+  --light-font: rgb(71, 68, 68);
+}
+
+.hidden {
+  display: none;
 }
 
 body {
   font-family: 'open_sansregular', sans-serif;
   color: var(--font);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--body-background);
+  padding: 20px;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--container-background);
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  margin: 32vw;
+}
+
+search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--search-background);
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--light-font);
+  width: 100%;
+}
+
+#search-btn {
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: var(--secondary);
+  color: white;
+  height: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: var(--description);
+}
+
+#search-btn:hover, #search-btn:active {
+  filter: brightness(92%);
+}
+
+#search-btn:active {
+  transform: scale(0.95);
+}
+
+input {
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: var(--input-background);
+  color: white;
+  padding: 5px;
+  grid-column: 1 / 2;
+  margin-right: 5px;
+  min-width: 100%;
+}
+
+input:focus, input:active {
+  border: 2px solid black;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.form-wrapper > div:first-child {
+  width: 100%;
+}
+
+main > div {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  background-color: var(--main-background);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#wrapper-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 2vw;
+  width: 100%;
+}
+
+#first-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#second-wrapper {
+  font-size: var(--second-wrapper);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  text-align: right;
+  justify-content: center;
+}
+
+#description {
+  color: var(--secondary-font);
+  font-size: var(--description);
+  text-align: right;
+  font-weight: bold;
+}
+
+#temperature {
+  font-size: var(--temperature);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .note {
   background-color: rgb(245, 245, 245);
   border-radius: 0 0 5px 5px;
-  width: 100%;
   font-size: var(--input-note);
   text-align: center;
+  grid-row: 2 / 3;
+  grid-column: 1  / 2;
 }
 
 .note.active {
   padding: 5px;
 }
 
-.input-wrapper {
-  display: flex;
-  gap: 5px;
-}
-
-.input-wrapper > div {
-  display: flex;
-  flex-direction: column;
+.form-wrapper {
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: max-content auto;
+  width: 100%;
+  max-width: 100%;
+  column-gap: 5px;
 }
 
 h2 {
-  font-weight: normal;
-}
-
-h2 > span {
   font-weight: bold;
+  color: var(--font);
+  font-size: var(--header);
+  align-self: flex-start;
 }
 
 #days-container {
-  display: flex;
-  gap: 20px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));;
+  grid-auto-rows: min-content;
+  margin-top: -10px;
+  width: 100%;
 }
 
 .day-wrapper {
@@ -64,10 +215,24 @@ h2 > span {
   border-radius: 10px;
   padding: 10px;
   gap: 10px;
+  cursor: pointer;
 }
 
-img {
+.day-wrapper img {
   width: 30px;
+  height: 30px;
+}
+
+nav > button {
+  padding: 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+article img {
+  width: 60px;
+  height: 60px;
 }
 
 .text-wrapper {
@@ -77,4 +242,34 @@ img {
 
 .temp-min {
   color: var(--light-font);
+}
+
+.main-temperature {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.on {
+  color: var(--secondary);
+}
+
+.off {
+  color: var(--light-font);
+}
+
+.divider {
+  display: inline-block;
+  transform: translateY(-2.5px);
+}
+
+.celsius, .fahrenheit {
+  cursor: pointer;
+}
+
+.selected {
+  filter: brightness(120%);
+}
+
+.selected-title {
+  color: var(--secondary);
 }

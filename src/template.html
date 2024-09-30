@@ -6,25 +6,31 @@
     <title></title>
 </head>
 <body>
-  <search>
-    <form>
-      <label for="location">Search your location:</label>
-      <div class="input-wrapper">
-        <div>
-          <input type="search" id="location" pattern=".*[a-zA-Z]+.*" size="40" required />
+  <div id="container">
+    <search>
+      <form spellcheck="false">
+        <label for="location">Search your location:</label>
+        <div class="form-wrapper">
+          <div>
+            <input id="location" pattern=".*[a-zA-Z]+.*" autocomplete="off" required />
+          </div>
+          <div>
+            <button id="search-btn">Search</button>
+          </div>
           <span class="note" aria-live="polite"></span>
         </div>
-        <div>
-          <button id="search-btn">Search</button>
-        </div>
+      </form>
+    </search>
+    <main class="hidden">
+      <div>
+        <article>
+          <div id="first-wrapper">
+          </div>
+          <div id="second-wrapper">
+          </div>
+        </article>
       </div>
-    </form>
-  </search>
-  <main>
-    <h2>
-    </h2>
-    <article>
-    </article>
-  </main>
+    </main>
+  </div>
 </body>
 </html>
