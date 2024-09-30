@@ -49,7 +49,7 @@ const main = document.querySelector('main');
 const clean = function resetSearchDisplayState() {
   main.replaceChildren();
   create('h2', main);
-  create('article', main);
+  create('section', main);
 };
 
 const updateHeader = function updateHeaderSearchInfo(weatherData) {
@@ -64,7 +64,7 @@ const errorMessage = function displayErrorMessage(text) {
 };
 
 const updateSelected = function showSelectedDayInfo(i, weatherData) {
-  const selectedDay = create('article', '', 'selected-day');
+  const selectedDay = create('section', '', 'selected-day');
   const infoList = [
     `Temperature: ${weatherData.days[i].temp}°`,
     `Humidity: ${weatherData.days[i].humidity}%`,
@@ -82,21 +82,21 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
 };
 
 const showWeek = function showWeekInfoCards(weatherData) {
-  const div = create('div', '', 'days-container');
+  const nav = create('nav', '', 'days-container');
 
   weatherData.days.forEach(day => {
-    const article = create('article', '', '', 'day-wrapper');
+    const section = create('section', '', '', 'day-wrapper');
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
       new Date(`${day.datetime}T00:00:00`).getDay()
     ];
-    create('p', article, '', 'week-day', days);
-    createImg(article, iconList[day.icon]);
-    const textWrapper = create('div', article, '', 'text-wrapper');
+    create('h3', section, '', 'week-day', days);
+    createImg(section, iconList[day.icon]);
+    const textWrapper = create('div', section, '', 'text-wrapper');
     create('p', textWrapper, '', 'temp-max', `${day.tempmax}°`);
     create('p', textWrapper, '', 'temp-min', `${day.tempmin}°`);
 
-    div.appendChild(article);
-    main.appendChild(div);
+    nav.appendChild(section);
+    main.appendChild(nav);
   });
 };
 
