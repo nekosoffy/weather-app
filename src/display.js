@@ -1,3 +1,5 @@
+import change from './index';
+
 const iconList = {};
 
 function importAll(moduleResolver) {
@@ -45,11 +47,10 @@ function createImg(parent, source) {
 //
 
 const main = document.querySelector('main');
+const article = document.querySelector('article');
 
 const clean = function resetSearchDisplayState() {
-  main.replaceChildren();
-  create('h2', main);
-  create('section', main);
+  article.replaceChildren();
 };
 
 const updateHeader = function updateHeaderSearchInfo(weatherData) {
@@ -64,7 +65,7 @@ const errorMessage = function displayErrorMessage(text) {
 };
 
 const updateSelected = function showSelectedDayInfo(i, weatherData) {
-  const selectedDay = create('section', '', 'selected-day');
+  clean();
   const infoList = [
     `Temperature: ${weatherData.days[i].temp}°`,
     `Humidity: ${weatherData.days[i].humidity}%`,
@@ -74,15 +75,15 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
   ];
 
   infoList.forEach((el, index) => {
-    create('p', selectedDay, '', 'property', `${infoList[index]}`);
+    create('p', article, '', 'property', `${infoList[index]}`);
   });
 
-  createImg(selectedDay, iconList[weatherData.days[i].icon]);
-  main.appendChild(selectedDay);
+  createImg(article, iconList[weatherData.days[i].icon]);
 };
 
 const showWeek = function showWeekInfoCards(weatherData) {
   const nav = create('nav', '', 'days-container');
+  nav.addEventListener('click', change);
 
   weatherData.days.forEach(day => {
     const section = create('section', '', '', 'day-wrapper');

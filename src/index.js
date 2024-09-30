@@ -13,6 +13,7 @@ import {
 const input = selectId('location');
 const form = select('form');
 const inputNote = select('input + span');
+let weatherData;
 
 const getData = async function getDataFromAPI(location) {
   try {
@@ -34,9 +35,8 @@ const getData = async function getDataFromAPI(location) {
       return;
     }
 
-    const weatherData = await response.json();
+    weatherData = await response.json();
 
-    clean();
     updateHeader(weatherData);
     updateSelected(0, weatherData);
     showWeek(weatherData);
@@ -63,6 +63,18 @@ const handleClick = function handleSearchBtnClick(event) {
 
   getData(location);
 };
+
+const change = function changeSelectedInfoCard(event) {
+  const sections = document.querySelectorAll('section');
+  sections.forEach((el, index) => {
+    if (el === event.target || el.contains(event.target)) {
+      clean();
+      updateSelected(index, weatherData);
+    }
+  });
+};
+
+export default change;
 
 input.addEventListener('focusin', () => {
   inputNote.classList.add('active');
