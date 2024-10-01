@@ -8,15 +8,18 @@ import {
   clean,
   updateSelected,
   showWeek,
+  toggleCelsius,
 } from './display';
 
 const input = selectId('location');
 const form = select('form');
 const inputNote = select('search span');
 const main = select('main');
+const article = select('article');
 let weatherData;
+let selectedDay = 0;
 
-const getData = async function getDataFromAPI(location) {
+const reset = function resetDisplayState() {
   clean();
 
   const nav = select('nav');
@@ -24,6 +27,18 @@ const getData = async function getDataFromAPI(location) {
   if (nav) {
     nav.remove();
   }
+};
+
+const populate = function populateDisplayInfo() {
+  updateHeader(weatherData);
+  updateSelected(selectedDay, weatherData);
+  showWeek(selectedDay, weatherData);
+};
+
+const getData = async function getDataFromAPI(location) {
+  main.classList.add('hidden');
+  selectedDay = 0;
+  reset();
 
   try {
     const response = await fetch(
@@ -48,9 +63,7 @@ const getData = async function getDataFromAPI(location) {
     weatherData = await response.json();
 
     main.classList.remove('hidden');
-    updateHeader(weatherData);
-    updateSelected(0, weatherData);
-    showWeek(weatherData);
+    populate();
   } catch (error) {
     errorMessage('An unexpected error occurred. Please try again later.');
   }
@@ -77,33 +90,54 @@ const handleClick = function handleSearchBtnClick(event) {
 
 const change = function changeSelectedInfoCard(event) {
   const sections = document.querySelectorAll('section');
-  sections.forEach((el, index) => {
-    if (el.classList.contains('selected')) {
-      const h3 = el.querySelector('h3');
-      h3.classList.remove('selected-title');
-      el.classList.remove('selected');
-    }
+  const nav = document.querySelector('nav');
 
-    if (el === event.target || el.contains(event.target)) {
-      clean();
-      updateHeader(weatherData);
-      updateSelected(index, weatherData);
-      el.classList.add('selected');
-      const h3 = el.querySelector('h3');
-      h3.classList.add('selected-title');
-    }
-  });
+  if (nav.contains(event.target)) {
+    sections.forEach((el, index) => {
+      if (el.classList.contains('selected')) {
+        const h3 = el.querySelector('h3');
+        h3.classList.remove('selected-title');
+        el.classList.remove('selected');
+      }
+
+      if (el === event.target || el.contains(event.target)) {
+        clean();
+        updateHeader(weatherData);
+        updateSelected(index, weatherData);
+        selectedDay = index;
+        el.classList.add('selected');
+        const h3 = el.querySelector('h3');
+        h3.classList.add('selected-title');
+      }
+    });
+  }
 };
 
+const tempShift = function temperatureUnitShift(event) {
+  const celsius = document.querySelector('.celsius');
+  const fahrenheit = document.querySelector('.fahrenheit');
+
+  if (
+    (event.target === celsius && !celsius.classList.contains('on')) ||
+    (event.target === fahrenheit && !fahrenheit.classList.contains('on'))
+  ) {
+    fahrenheit.classList.toggle('on');
+    celsius.classList.toggle('on');
+    toggleCelsius();
+    reset();
+    populate();
+  }
+};
+
+article.addEventListener('click', tempShift);
 main.addEventListener('click', change);
+form.addEventListener('submit', handleClick);
 
 input.addEventListener('focusin', () => {
   inputNote.classList.add('active');
   inputNote.textContent =
     'Enter your city, state, or country. You can separate them by commas.';
 });
-
-form.addEventListener('submit', handleClick);
 
 input.addEventListener('focusout', event => {
   const target = event.relatedTarget;

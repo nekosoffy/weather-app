@@ -10,7 +10,7 @@
   --input-note: 1.1rem;
   --description: 1.3rem;
   --second-wrapper: 1.5rem;
-  --temperature: 2.5rem;
+  --temperature: 2.8rem;
   --header: 2.5rem;
 
   /* Colors: */
@@ -22,7 +22,6 @@
   --body-background: rgb(54, 104, 138);
   --main-background: rgb(131, 217, 217);
   --secondary: rgb(232, 99, 9);
-  --secondary-font: rgb(232, 99, 9);
   --header-font: rgb(204, 87, 10);
   --font: rgb(40, 64, 79);
   --light-font: rgb(71, 68, 68);
@@ -52,6 +51,7 @@ body {
   padding: 20px;
   width: 100%;
   margin: 32vw;
+  max-height: 100vh;
 }
 
 search {
@@ -115,7 +115,6 @@ form {
 main > div {
   display: flex;
   flex-direction: column;
-  align-content: space-around;
   background-color: var(--main-background);
   padding: 10px;
   border-radius: 10px;
@@ -128,13 +127,15 @@ article {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 100%;
 }
 
 #wrapper-container {
   display: flex;
-  justify-content: space-around;
-  gap: 2vw;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  gap: max(1px, 1.5vw);
 }
 
 #first-wrapper {
@@ -149,15 +150,15 @@ article {
   font-size: var(--second-wrapper);
   display: flex;
   flex-direction: column;
-  width: max-content;
-  text-align: right;
+  width: 45%;
+  text-align: left;
   justify-content: center;
 }
 
 #description {
-  color: var(--secondary-font);
+  color: var(--secondary);
   font-size: var(--description);
-  text-align: right;
+  text-align: left;
   font-weight: bold;
 }
 
@@ -206,6 +207,10 @@ h2 {
   width: 100%;
 }
 
+nav {
+  overflow-y: auto;
+}
+
 .day-wrapper {
   display: flex;
   flex-direction: column;
@@ -219,6 +224,8 @@ h2 {
 }
 
 .day-wrapper img {
+  max-width: 30px;
+  max-height: 30px;
   width: 30px;
   height: 30px;
 }
@@ -231,6 +238,8 @@ nav > button {
 }
 
 article img {
+  max-width: 60px;
+  max-height: 60px;
   width: 60px;
   height: 60px;
 }
@@ -249,21 +258,24 @@ article img {
   margin-right: 5px;
 }
 
-.on {
-  color: var(--secondary);
+.fahrenheit, 
+.celsius {
+  color: var(--light-font);
+  cursor: pointer;
 }
 
-.off {
-  color: var(--light-font);
+.celsius-temperature,
+.fahrenheit-temperature {
+  margin-right: 7px;
+}
+
+.on {
+  color: var(--secondary);
 }
 
 .divider {
   display: inline-block;
   transform: translateY(-2.5px);
-}
-
-.celsius, .fahrenheit {
-  cursor: pointer;
 }
 
 .selected {

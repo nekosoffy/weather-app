@@ -42,10 +42,22 @@ function createImg(parent, source) {
 
   parent.appendChild(el);
 }
+
+function conversion(temp) {
+  const unformattedTemp = ((parseInt(temp, 10) - 32) * 5) / 9;
+  const formattedTemp = parseFloat(unformattedTemp.toFixed(1));
+
+  return formattedTemp;
+}
 //
 
 const main = document.querySelector('main');
 const article = document.querySelector('article');
+let celsiusOn = true;
+
+function toggleCelsius() {
+  celsiusOn = !celsiusOn;
+}
 
 const clean = function resetSearchDisplayState() {
   article.replaceChildren();
@@ -71,20 +83,38 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
   const temperature = create('p', firstWrapper, 'temperature');
   temperature.setAttribute('aria-label', 'temperature');
 
-  create(
+  const fahrenheitTemp = create(
     'span',
     temperature,
     '',
-    'main-temperature',
+    'fahrenheit-temperature',
     `${weatherData.days[i].temp}`,
   );
 
+  const celsiusTemp = create(
+    'span',
+    temperature,
+    '',
+    'celsius-temperature',
+    `${conversion(weatherData.days[i].temp)}`,
+  );
+
+  if (celsiusOn) {
+    fahrenheitTemp.classList.add('hidden');
+  } else {
+    celsiusTemp.classList.add('hidden');
+  }
+
   create('span', temperature, '', '', ` °`);
-  const celsius = create('span', temperature, '', 'celsius', 'C');
+  const celsiusSymbol = create('span', temperature, '', 'celsius', 'C');
   create('span', temperature, '', 'divider', '|');
   const fahrenheit = create('span', temperature, '', 'fahrenheit', 'F');
-  celsius.classList.add('on');
-  fahrenheit.classList.add('off');
+
+  if (celsiusOn) {
+    celsiusSymbol.classList.add('on');
+  } else {
+    fahrenheit.classList.add('on');
+  }
 
   const infoList = [
     `Humidity: ${weatherData.days[i].humidity}%`,
@@ -105,7 +135,7 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
   });
 };
 
-const showWeek = function showWeekInfoCards(weatherData) {
+const showWeek = function showWeekInfoCards(index, weatherData) {
   const nav = create('nav', '', 'days-container');
 
   weatherData.days.forEach(day => {
@@ -117,15 +147,53 @@ const showWeek = function showWeekInfoCards(weatherData) {
     create('h3', section, '', 'week-day', days);
     createImg(section, iconList[day.icon]);
     const textWrapper = create('div', section, '', 'text-wrapper');
-    create('p', textWrapper, '', 'temp-max', `${day.tempmax}°`);
-    create('p', textWrapper, '', 'temp-min', `${day.tempmin}°`);
+
+    const fahrenheitTempMax = create(
+      'p',
+      textWrapper,
+      '',
+      'temp-max',
+      `${day.tempmax}°`,
+    );
+
+    const fahrenheitTempMin = create(
+      'p',
+      textWrapper,
+      '',
+      'temp-min',
+      `${day.tempmin}°`,
+    );
+
+    const celsiusTempMax = create(
+      'p',
+      textWrapper,
+      '',
+      'temp-max',
+      `${conversion(day.tempmax)}°`,
+    );
+    const celsiusTempMin = create(
+      'p',
+      textWrapper,
+      '',
+      'temp-min',
+      `${conversion(day.tempmin)}°`,
+    );
+
+    if (celsiusOn) {
+      fahrenheitTempMax.classList.add('hidden');
+      fahrenheitTempMin.classList.add('hidden');
+    } else {
+      celsiusTempMax.classList.add('hidden');
+      celsiusTempMin.classList.add('hidden');
+    }
 
     main.appendChild(nav);
-    const selectedSection = document.querySelector('section');
-    const selectedTitle = document.querySelector('h3');
-    selectedSection.classList.add('selected');
-    selectedTitle.classList.add('selected-title');
   });
+
+  const selectedSection = [...document.querySelectorAll('section')];
+  const selectedTitle = [...document.querySelectorAll('h3')];
+  selectedSection[index].classList.add('selected');
+  selectedTitle[index].classList.add('selected-title');
 };
 
 export {
@@ -136,4 +204,5 @@ export {
   clean,
   updateSelected,
   showWeek,
+  toggleCelsius,
 };
