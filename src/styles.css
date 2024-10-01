@@ -7,11 +7,11 @@
 
 :root {
   /* Font sizes: */
-  --input-note: 1.1rem;
-  --description: 1.4rem;
-  --second-wrapper: 1.5rem;
-  --temperature: 2.8rem;
-  --header: 2.5rem;
+  --input-note: 1.3rem;
+  --description: 1.7rem;
+  --temperature: 3rem;
+  --header: 2.9rem;
+  --search: 1.9rem;
 
   /* Colors: */
   --days-background: rgb(159, 212, 212);
@@ -50,7 +50,7 @@ body {
   border-radius: 10px;
   padding: 20px;
   width: 100%;
-  margin: 33vw;
+  margin: 34vw;
   max-height: 100vh;
 }
 
@@ -63,6 +63,7 @@ search {
   border-radius: 10px;
   color: var(--light-font);
   width: 100%;
+  font-size: var(--search);
 }
 
 #search-btn {
@@ -147,7 +148,7 @@ article {
 }
 
 #second-wrapper {
-  font-size: var(--second-wrapper);
+  font-size: var(--search);
   display: flex;
   flex-direction: column;
   width: 45%;
@@ -205,10 +206,8 @@ h2 {
   grid-auto-rows: min-content;
   margin-top: -10px;
   width: 100%;
-}
-
-nav {
   overflow-y: auto;
+  max-height: 100%;
 }
 
 .day-wrapper {
@@ -221,6 +220,7 @@ nav {
   padding: 10px;
   gap: 10px;
   cursor: pointer;
+  font-size: var(--search);
 }
 
 .day-wrapper img {
@@ -230,7 +230,7 @@ nav {
   height: 30px;
 }
 
-nav > button {
+#days-container > button {
   padding: 0;
   border-radius: 10px;
   border: none;
