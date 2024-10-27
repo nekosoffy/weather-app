@@ -135,6 +135,7 @@ article {
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   gap: max(1px, 1.5vw);
 }
@@ -151,8 +152,6 @@ article {
   font-size: var(--search);
   display: flex;
   flex-direction: column;
-  width: 45%;
-  text-align: left;
   justify-content: center;
 }
 

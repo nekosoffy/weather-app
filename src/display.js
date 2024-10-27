@@ -75,6 +75,7 @@ const errorMessage = function displayErrorMessage(text) {
 };
 
 const updateSelected = function showSelectedDayInfo(i, weatherData) {
+  const descriptionSection = document.querySelector('.description');
   const wrapperContainer = create('div', article, 'wrapper-container');
   const firstWrapper = create('div', wrapperContainer, 'first-wrapper');
   const secondWrapper = create('div', wrapperContainer, 'second-wrapper');
@@ -122,9 +123,11 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
     `Wind: ${weatherData.days[i].windspeed} km/h`,
   ];
 
+  descriptionSection.replaceChildren();
+
   create(
     'p',
-    secondWrapper,
+    descriptionSection,
     'description',
     '',
     `${weatherData.days[i].description}`,
