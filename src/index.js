@@ -16,6 +16,7 @@ const form = select('form');
 const inputNote = select('search span');
 const main = select('main');
 const article = select('article');
+const description = select('.description');
 let weatherData;
 let selectedDay = 0;
 
@@ -37,6 +38,7 @@ const populate = function populateDisplayInfo() {
 
 const getData = async function getDataFromAPI(location) {
   main.classList.add('hidden');
+  description.classList.add('hidden');
   selectedDay = 0;
   reset();
 
@@ -63,6 +65,7 @@ const getData = async function getDataFromAPI(location) {
     weatherData = await response.json();
 
     main.classList.remove('hidden');
+    description.classList.remove('hidden');
     populate();
   } catch (error) {
     errorMessage('An unexpected error occurred. Please try again later.');

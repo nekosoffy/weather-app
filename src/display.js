@@ -125,6 +125,8 @@ const updateSelected = function showSelectedDayInfo(i, weatherData) {
 
   descriptionSection.replaceChildren();
 
+  create('p', descriptionSection, 'description-title', '', 'Overview:');
+
   create(
     'p',
     descriptionSection,
