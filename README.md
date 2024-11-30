@@ -1,6 +1,6 @@
 # Weather Application
 
-:arrow_forward:  **[Live preview!](https://nekosoffy.github.io/weather-app/)**
+:arrow_forward:  **[Live preview!](https://softy-dev.github.io/weather-app/)**
 
 A project that utilizes the [Visual Crossing](https://www.visualcrossing.com/) Weather Data API to provide comprehensive weather information. Users can specify a location by entering their city, state, country, or other relevant detail, and receive current data on temperature, rain probability, wind speed, and an overall climate conditions description.
 
